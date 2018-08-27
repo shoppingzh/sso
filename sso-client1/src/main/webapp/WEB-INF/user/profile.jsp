@@ -7,8 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-  用户信息[子系统1]
+  <p>[子系统1]</p>
+  <h5>用户信息</h5>
+  <p><b>用户名：</b>${name }</p>
+  <p><b>年龄：</b>${age }</p>
 
 </body>
 </html>

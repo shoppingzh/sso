@@ -1,4 +1,4 @@
-package com.littlezheng.web.support;
+package com.littlezheng.util.sso;
 
 public class AjaxResult {
 
