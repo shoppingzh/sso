@@ -4,10 +4,10 @@
 	<artifactId>sso-client1</artifactId>
 	<packaging>war</packaging>
 	<parent>
-    <groupId>com.littlezheng</groupId>
-    <artifactId>sso-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
+		<groupId>com.littlezheng</groupId>
+		<artifactId>sso-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
 	<dependencies>
 		<!-- modules -->
@@ -34,17 +34,14 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.3.18.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.3.18.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.3.18.RELEASE</version>
 		</dependency>
 	</dependencies>
 
