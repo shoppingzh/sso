@@ -1,9 +1,10 @@
-package com.littlezheng.web.support;
+package com.littlezheng.util;
 
 public class AjaxResult {
 
     private String code;
     private String message;
+    private Object data;
 
     public AjaxResult() {
         super();
@@ -18,6 +19,13 @@ public class AjaxResult {
         super();
         this.code = code;
         this.message = message;
+    }
+
+    public AjaxResult(String code, String message, Object data) {
+        super();
+        this.code = code;
+        this.message = message;
+        this.data = data;
     }
 
     public String getCode() {
@@ -36,9 +44,17 @@ public class AjaxResult {
         this.message = message;
     }
 
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
     @Override
     public String toString() {
-        return "AjaxResult [code=" + code + ", message=" + message + "]";
+        return "AjaxResult [code=" + code + ", message=" + message + ", data=" + data + "]";
     }
 
 }
