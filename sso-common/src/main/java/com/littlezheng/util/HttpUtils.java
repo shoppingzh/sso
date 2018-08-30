@@ -1,4 +1,4 @@
-package com.littlezheng.util.sso;
+package com.littlezheng.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
