@@ -21,19 +21,23 @@ public class SSOUtils {
     private static final String SSO_VERIFY_URL = "http://localhost/sso-server/user/verify";
     private static final String SSO_LOGOUT_URL = "http://localhost/sso-server/user/logout";
     
-    public static boolean login(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-        String token = req.getParameter("token");
+    /**
+     * sso登录
+     * @param req
+     * @param resp
+     * @param callback
+     * @throws IOException
+     */
+    public static void login(HttpServletRequest req, HttpServletResponse resp, LoginCallback callback) throws IOException{
+    	String token = req.getParameter("token");
         if(StringUtils.isNotBlank(token)){
             String username = verifyToken(token);
             if(StringUtils.isNotBlank(username)){
-                req.getSession(true).setAttribute("zxpsso_username", username);
-                return true;
+            	callback.onSuccess(req, resp, username, token);
             }
         }
         String redirectUrl = SSO_SERVER_LOGIN_URL + "?returnUrl=" + getReturnUrl(req);
         resp.sendRedirect(redirectUrl);
-        
-        return false;
     }
     
     //获取返回URL
@@ -51,6 +55,11 @@ public class SSOUtils {
         return url;
     }
 
+    /**
+     * 校验令牌，校验成功返回登录的用户名
+     * @param token
+     * @return
+     */
     public static String verifyToken(String token){
         if(StringUtils.isNotBlank(token)){
             try {
