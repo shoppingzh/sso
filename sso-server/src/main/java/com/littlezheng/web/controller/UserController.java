@@ -50,11 +50,8 @@ public class UserController {
         Model model, HttpSession session) throws IOException{
         if(DEFAULT_USERNAME.equalsIgnoreCase(username) && DEFAULT_PASSWROD.equalsIgnoreCase(password)){
             String token = UUID.randomUUID().toString();
-            
             doLogin(session, username, token);
             registerSubSystem(token, returnUrl);
-            
-            System.out.println("[第4步] sso认证中心登录成功，生成全局会话和token，将token携带着回到原请求页面, token: [" + token  + "]");        
             return back(returnUrl, token);
         }
         
