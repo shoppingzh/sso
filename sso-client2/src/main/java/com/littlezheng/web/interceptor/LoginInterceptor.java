@@ -14,18 +14,19 @@ public class LoginInterceptor implements HandlerInterceptor{
 
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		HttpSession session = request.getSession();
-    	if(session.getAttribute("username") == null){
-    		SSOUtils.login(request, response, new LoginCallback() {
-				@Override
-				public void onSuccess(HttpServletRequest req, HttpServletResponse resp,
-						String username, String token) {
-					req.getSession().setAttribute("username", username);
-				}
-				
-			});
-    	}
-    	
+	    HttpSession session = request.getSession();
+        if(session.getAttribute("username") == null){
+            SSOUtils.login(request, response, new LoginCallback() {
+                @Override
+                public void onSuccess(HttpServletRequest req, HttpServletResponse resp,
+                        String username, String token) {
+                    req.getSession().setAttribute("username", username);
+                    req.getSession().setAttribute("token", token);
+                }
+                
+            });
+        }
+        
         return true;
     }
     

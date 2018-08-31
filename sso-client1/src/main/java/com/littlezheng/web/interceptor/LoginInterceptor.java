@@ -21,6 +21,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 				public void onSuccess(HttpServletRequest req, HttpServletResponse resp,
 						String username, String token) {
 					req.getSession().setAttribute("username", username);
+					req.getSession().setAttribute("token", token);
 				}
 				
 			});

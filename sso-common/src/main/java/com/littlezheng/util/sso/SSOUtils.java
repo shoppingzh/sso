@@ -82,6 +82,12 @@ public class SSOUtils {
         return null;
     }
 
+    /**
+     * ssoµÇ³ö
+     * @param token
+     * @return
+     * @throws IOException
+     */
     public static boolean logout(String token) throws IOException {
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);

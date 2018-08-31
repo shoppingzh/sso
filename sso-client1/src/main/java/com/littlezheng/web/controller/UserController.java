@@ -42,7 +42,7 @@ public class UserController {
     
     private void doLogout(HttpSession session) {
         System.out.println("注销子系统");
-        session.removeAttribute("isLogin");
+        session.removeAttribute("username");
         session.removeAttribute("token");
         session.invalidate();
     }

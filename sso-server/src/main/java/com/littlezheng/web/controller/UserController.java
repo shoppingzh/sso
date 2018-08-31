@@ -2,11 +2,6 @@ package com.littlezheng.web.controller;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.littlezheng.util.AjaxResult;
+import com.littlezheng.web.support.BasicSSOSession;
+import com.littlezheng.web.support.SSOSession;
+import com.littlezheng.web.support.SSOSessionContext;
 
 @Controller
 @RequestMapping(path="/user")
@@ -29,8 +27,6 @@ public class UserController {
     
     private static final String DEFAULT_USERNAME = "admin";
     private static final String DEFAULT_PASSWROD = "123";
-    private static final Set<String> TOKENS = new HashSet<String>();
-    private static final Map<String, String> TOKEN_MAP = new HashMap<String, String>();
 
     @GetMapping(path="/login")
     public ModelAndView loginPage(@RequestParam(name="returnUrl") String returnUrl, 
@@ -49,9 +45,7 @@ public class UserController {
         @RequestParam(name="returnUrl") String returnUrl,
         Model model, HttpSession session) throws IOException{
         if(DEFAULT_USERNAME.equalsIgnoreCase(username) && DEFAULT_PASSWROD.equalsIgnoreCase(password)){
-            String token = UUID.randomUUID().toString();
-            doLogin(session, username, token);
-            registerSubSystem(token, returnUrl);
+            String token = SSOSessionContext.add(new BasicSSOSession(session, username));
             return back(returnUrl, token);
         }
         
@@ -62,18 +56,15 @@ public class UserController {
 	//注册子系统
     private void registerSubSystem(String token, String returnUrl) {
         String subSystem = getSubSystem(returnUrl);
-        System.out.println("注册子系统：" + subSystem);
-    }
-
-    private void doLogin(HttpSession session, String username, String token) {
-        session.setAttribute("username", username);
-        session.setAttribute("token", token);
-        TOKENS.add(token);
-        TOKEN_MAP.put(token, username);
-        System.out.println(TOKEN_MAP);
+        SSOSession ssoSession = SSOSessionContext.get(token);
+        if(ssoSession != null){
+            ssoSession.bindSubSystem(subSystem);
+        }
     }
 
     private ModelAndView back(String returnUrl, String token) throws IOException{
+        registerSubSystem(token, returnUrl);
+        
         String sign = "&";
         if(returnUrl.indexOf('?') == -1){
             sign = "?";
@@ -89,6 +80,9 @@ public class UserController {
     @RequestMapping(path="/logout")
     public @ResponseBody AjaxResult logout(@RequestParam(name="token") String token,
         HttpSession session) throws IOException{
+        if(verify(token)){
+            SSOSessionContext.get(token).invalidate();
+        }
         return new AjaxResult("201", "注销失败！");
     }
     
@@ -102,11 +96,15 @@ public class UserController {
     
     @RequestMapping(path="/verify")
     public @ResponseBody AjaxResult verifyToken(@RequestParam(name="token") String token){
-        if(TOKENS.contains(token)){
-            return new AjaxResult("100", "校验成功！", TOKEN_MAP.get(token));
+        if(verify(token)){
+            return new AjaxResult("100", "校验成功！", SSOSessionContext.get(token).getUsername());
         }else{
             return new AjaxResult("101", "校验失败！");
         }
+    }
+    
+    private boolean verify(String token){
+        return SSOSessionContext.has(token);
     }
     
 }

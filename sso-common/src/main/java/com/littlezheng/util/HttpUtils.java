@@ -32,6 +32,7 @@ public class HttpUtils {
         }
         post.setEntity(new UrlEncodedFormEntity(params));
         String resp = EntityUtils.toString(client.execute(post).getEntity());
+        System.out.println(resp);
         client.close();
         return resp;
     }
